@@ -2,24 +2,35 @@ import { useState } from 'react'
 
 const Button = ({handleClick, text}) => <button onClick={handleClick}>{text}</button>
 
-const StatisticsLine = ({text, value}) => <p>{text} {value}</p>
+const StatisticsLine = ({text, value}) => {
+  return (
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
+  )
+}
 
 const Statistics = ({good, neutral, bad}) => {
   const calculateAllComments = () => good + neutral + bad
-  const calculateAverageComments = () => (good - bad) / calculateAllComments()
-  const calculateGoodPercentage = () => (good / calculateAllComments()) * 100
+  const calculateAverageComments = () => ((good - bad) / calculateAllComments()).toFixed(2)
+  const calculateGoodPercentage = () => {
+    return ((good / calculateAllComments()) * 100).toFixed(1) + ' %'
+  }
 
   if(calculateAllComments() === 0) return <p>No feedback given</p>
 
   return (
-    <>
-      <StatisticsLine text="good" value={good}/>
-      <StatisticsLine text="neutral" value={neutral} />
-      <StatisticsLine text="bad" value={bad} />
-      <StatisticsLine text="all" value={calculateAllComments()} />
-      <StatisticsLine text="average" value={calculateAverageComments()} />
-      <StatisticsLine text="positive" value={calculateGoodPercentage()} />
-    </>
+    <table>
+      <tbody>
+        <StatisticsLine text="good" value={good}/>
+        <StatisticsLine text="neutral" value={neutral} />
+        <StatisticsLine text="bad" value={bad} />
+        <StatisticsLine text="all" value={calculateAllComments()} />
+        <StatisticsLine text="average" value={calculateAverageComments()} />
+        <StatisticsLine text="positive" value={calculateGoodPercentage()} />
+      </tbody>
+    </table>
   )
 }
 
