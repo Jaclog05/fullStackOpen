@@ -1,5 +1,32 @@
 import { useState } from 'react'
 
+const AnecdotesVoting = ({anecdote, anecdoteVotes}) => {
+  return (
+    <div>
+      <h1>Anecdote of the day</h1>
+      <p>{anecdote}</p>
+      <p>has {anecdoteVotes} votes</p>
+    </div>
+  )
+}
+
+const Button = ({handleClick, text}) => {
+  return (
+    <button onClick={handleClick} >
+      {text}
+    </button>
+  )
+}
+
+const BestAnecdoteByVotes = ({anecdote}) => {
+  return (
+    <div>
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdote}</p>
+    </div>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -13,37 +40,33 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
-  const [votes, setVotes] = useState({
-    0: 0,
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0
-  })
+  const [votes, setVotes] = useState([0, 0, 0, 0, 0, 0, 0, 0])
+
+  const anecdote = anecdotes[selected]
+  const anecdoteVotes = votes[selected]
 
   const handleVote = () => {
-    setVotes(prevVotes => {
-      return {
-        ...prevVotes,
-        [selected]: prevVotes[selected] + 1
-      }
-    })
+    const copy = [...votes]
+    copy[selected]++
+    setVotes(copy)
   }
 
-  const handleClick = () => {
-    const randomNumber = Math.floor(Math.random() * 8)
+  const handleNext = () => {
+    const randomNumber = Math.floor(Math.random() * anecdotes.length)
     setSelected(randomNumber)
+  }
+
+  const findAnecdoteWithMostVotes = () => {
+    const bestAnecdoteIndex = votes.indexOf(Math.max(...votes))
+    return anecdotes[bestAnecdoteIndex]
   }
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>has {votes[selected]} votes</p>
-      <button onClick={handleVote}>vote</button>
-      <button onClick={handleClick}>next anecdote</button>
+      <AnecdotesVoting anecdote={anecdote} anecdoteVotes={anecdoteVotes} />
+      <Button handleClick={handleVote} text='vote' />
+      <Button handleClick={handleNext} text='next anecdote' />
+      <BestAnecdoteByVotes anecdote={findAnecdoteWithMostVotes()} />
     </div>
   )
 }
