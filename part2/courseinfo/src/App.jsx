@@ -10,11 +10,22 @@ const Content = ({parts}) => (
 
 const Part = ({part}) => <p>{part.name} {part.exercises}</p>;
 
+const Total = ({total}) => {
+  return (
+    <h4>total of {total} exercises</h4>
+  )
+}
+
 const Course = ({course}) => {
+
+  let total = 0;
+  course.parts.forEach(part => total += part.exercises)
+
   return (
     <>
       <Header course={course.name} />
       <Content parts={course.parts} />
+      <Total total={total} />
     </>
   );
 };
@@ -37,6 +48,11 @@ const App = () => {
         name: "State of a component",
         exercises: 14,
         id: 3,
+      },
+      {
+        name: "Redux",
+        exercises: 11,
+        id: 4,
       },
     ],
   };
