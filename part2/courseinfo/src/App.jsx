@@ -18,8 +18,10 @@ const Total = ({total}) => {
 
 const Course = ({course}) => {
 
-  let total = 0;
-  course.parts.forEach(part => total += part.exercises)
+  const initialValue = 0;
+  const total = course.parts.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue.exercises
+  }, initialValue)
 
   return (
     <>
