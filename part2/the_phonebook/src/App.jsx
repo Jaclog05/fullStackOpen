@@ -28,13 +28,16 @@ const App = () => {
     if(isPersonAlreadyAdded) return alert(`${newName} is already added to phonebook`);
 
     const personObject = {
-      id: persons.length + 1,
       name: newName,
       number: newNumber
     }
-    setPersons(persons.concat(personObject))
-    setNewName("")
-    setNewNumber("")
+    axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setNewName("")
+        setNewNumber("")
+      })
   }
 
   const filteredPersons = filterName
