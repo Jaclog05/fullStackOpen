@@ -1,6 +1,6 @@
 import Person from "./Person";
 
-function PersonsList({ filteredPersons }) {
+function PersonsList({ filteredPersons, handleDelete }) {
   return (
     <>
       <h2>Numbers</h2>
@@ -9,6 +9,7 @@ function PersonsList({ filteredPersons }) {
           key={person.id}
           name={person.name}
           number={person.number}
+          onDelete={() => handleDelete(person.id)}
         />
       ))}
     </>

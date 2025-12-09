@@ -1,6 +1,9 @@
-function Person({name, number}) {
+function Person({name, number, onDelete}) {
   return (
-    <h4>{name} {number}</h4>
+    <div>
+      <span>{name} {number}</span>
+      <button onClick={onDelete}>delete</button>
+    </div>
   )
 }
 
