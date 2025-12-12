@@ -16,6 +16,8 @@ function App() {
     setQuery(event.target.value);
   };
 
+  const handleClick = (name) => setQuery(name)
+
   const filteredCountries = query
     ? countries.filter((country) =>
         country.name.common.toLowerCase().includes(query.toLowerCase())
@@ -30,7 +32,7 @@ function App() {
       {filteredCountries.length === 1 ? (
         <CountryView country={filteredCountries[0]} />
       ) : (
-        <CountriesList countries={filteredCountries} />
+        <CountriesList countries={filteredCountries} onShowCountry={handleClick} />
       )}
     </div>
   );
