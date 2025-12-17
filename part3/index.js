@@ -52,6 +52,12 @@ app.get('/api/persons/:id', (request, response) => {
 app.post('/api/persons', (request, response) => {
   const body = request.body;
 
+  if(!body.name) return response.status(400).json({ error: 'missing name'})
+  if(!body.number) return response.status(400).json({ error: 'missing number'})
+
+  const isAlreadyAdded = persons.find(person => person.name === body.name);
+  if(isAlreadyAdded) return response.status(400).json({ error: 'name must be unique'})
+
   const newPerson = {
     id: generateRandomId(),
     name: body.name,
