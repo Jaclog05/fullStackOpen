@@ -1,6 +1,16 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
+const generateRandomId = () => {
+  let minimunRandomId = persons.length + 1;
+  let maximunRandomId = 10000;
+  return Math.floor(
+    Math.random() * (maximunRandomId - minimunRandomId) + minimunRandomId
+  );
+}
+
 let persons = [
     { 
       "id": 1,
@@ -37,6 +47,19 @@ app.get('/api/persons/:id', (request, response) => {
   }else {
     response.status(404).end()
   }
+})
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body;
+
+  const newPerson = {
+    id: generateRandomId(),
+    name: body.name,
+    number: body.number
+  }
+
+  persons = persons.concat(newPerson)
+  response.json(newPerson)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
