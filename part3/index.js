@@ -75,10 +75,15 @@ app.post('/api/persons', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(person => person.id !== id)
-
-  response.status(204).end()
+  const id = request.params.id
+  Person.findByIdAndDelete(id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => {
+      console.log(error)
+      response.status(500).end()
+    })
 })
 
 app.get('/info', (request, response) => {
