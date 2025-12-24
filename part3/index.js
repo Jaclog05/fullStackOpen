@@ -1,9 +1,8 @@
-require('dotenv').config()
-const mongoose = require('mongoose')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
+const Person = require('./models/person')
 
 app.use(express.static('dist'))
 app.use(express.json())
@@ -18,35 +17,6 @@ app.use(cors())
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :post")
 )
-
-const generateRandomId = () => {
-  let minimunRandomId = persons.length + 1;
-  let maximunRandomId = 10000;
-  return Math.floor(
-    Math.random() * (maximunRandomId - minimunRandomId) + minimunRandomId
-  );
-}
-
-const url = process.env.MONGODB_URI
-
-mongoose.set('strictQuery', false)
-
-mongoose.connect(url)
-
-const personSchema = new mongoose.Schema({
-  name: String,
-  number: String
-})
-
-personSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
-
-const Person = mongoose.model('Person', personSchema)
 
 let persons = [
     { 
@@ -94,17 +64,14 @@ app.post('/api/persons', (request, response) => {
   if(!body.name) return response.status(400).json({ error: 'missing name'})
   if(!body.number) return response.status(400).json({ error: 'missing number'})
 
-  const isAlreadyAdded = persons.find(person => person.name === body.name);
-  if(isAlreadyAdded) return response.status(400).json({ error: 'name must be unique'})
-
-  const newPerson = {
-    id: generateRandomId(),
+  const newPerson = new Person({
     name: body.name,
     number: body.number
-  }
+  })
 
-  persons = persons.concat(newPerson)
-  response.json(newPerson)
+  newPerson.save().then(person => {
+    response.json(person)
+  })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
