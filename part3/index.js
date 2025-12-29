@@ -6,7 +6,7 @@ const Person = require('./models/person')
 
 app.use(express.static('dist'))
 app.use(express.json())
-morgan.token('post', function (req, res) {
+morgan.token('post', function (req) {
   if(req.method === 'POST'){
     return JSON.stringify(req.body)
   } else {
@@ -41,8 +41,8 @@ app.get('/api/persons/:id', (request, response, next) => {
 app.post('/api/persons', (request, response, next) => {
   const body = request.body;
 
-  if(!body.name) return response.status(400).json({ error: 'missing name'})
-  if(!body.number) return response.status(400).json({ error: 'missing number'})
+  if(!body.name) return response.status(400).json({ error: 'missing name' })
+  if(!body.number) return response.status(400).json({ error: 'missing number' })
 
   const newPerson = new Person({
     name: body.name,
@@ -78,7 +78,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
   Person.findByIdAndDelete(id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))

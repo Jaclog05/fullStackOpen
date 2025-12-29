@@ -6,12 +6,17 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:ui": "rm -rf dist && cd ../part2/the_phonebook && npm run build && cp -r dist ../../part3"
+    "build:ui": "rm -rf dist && cd ../part2/the_phonebook && npm run build && cp -r dist ../../part3",
+    "lint": "eslint ."
   },
   "author": "\"Jaider Cueto\"",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@stylistic/eslint-plugin": "^5.6.1",
+    "eslint": "^9.39.2",
+    "globals": "^16.5.0",
     "nodemon": "^3.1.11"
   },
   "dependencies": {
