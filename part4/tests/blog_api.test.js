@@ -30,6 +30,14 @@ test('all blogs are returned', async () => {
   assert.strictEqual(response.body.length, helper.initialBlogs.length)
 })
 
+test('id property should be named "id"', async () => {
+  const response = await api.get('/api/blogs')
+  const databaseBlog = response.body[0]
+
+  assert.strict(Object.keys(databaseBlog).includes("id"));
+  assert.strict(!Object.keys(databaseBlog).includes("_id"));
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
