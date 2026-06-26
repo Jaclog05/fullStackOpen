@@ -38,6 +38,28 @@ test('id property should be named "id"', async () => {
   assert.strict(!Object.keys(databaseBlog).includes("_id"));
 })
 
+test('new blog added successfully', async() => {
+  const initialBlogsInDB = await api.get('/api/blogs')
+  const newBlog = {
+    title: "Nuevo Blog",
+    author: "Steven Spielberg",
+    url: "https://urldeprueba.com",
+    likes: 35
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  finalBlogsInDB = await api.get('/api/blogs')
+  assert.deepStrictEqual(finalBlogsInDB.body.length, initialBlogsInDB.body.length + 1)
+
+  const blogTitles = finalBlogsInDB.body.map(blog => blog.title)
+  assert.strict(blogTitles.includes("Nuevo Blog"))
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
