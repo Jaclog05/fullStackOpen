@@ -7,7 +7,11 @@ blogRoutes.get('/', async (req, res) => {
 })
 
 blogRoutes.post('/', async (req, res) => {
-  const blog = new Blog(req.body)
+  let body = req.body;
+  if(!body.likes) {
+    body = {...body, likes: 0}
+  }
+  const blog = new Blog(body)
 
   const result = await blog.save()
   res.status(201).json(result)
