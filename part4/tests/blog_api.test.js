@@ -77,6 +77,17 @@ test('if likes property is missing its default value will be zero', async () => 
   assert.strictEqual(result.body.likes, 0)
 })
 
+test('if title and url properties are missing respond with status code 400', async () => {
+  const newBlogWithMissingProperties = {
+    author: "Francis Ford Coppola"
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlogWithMissingProperties)
+    .expect(400)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })

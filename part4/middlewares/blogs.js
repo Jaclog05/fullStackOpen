@@ -11,6 +11,11 @@ blogRoutes.post('/', async (req, res) => {
   if(!body.likes) {
     body = {...body, likes: 0}
   }
+
+  if(!body.title || !body.url) {
+    return res.status(400).json({error: "title or url missing"})
+  }
+
   const blog = new Blog(body)
 
   const result = await blog.save()
